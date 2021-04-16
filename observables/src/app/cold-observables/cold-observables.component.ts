@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { interval, Observable, Observer, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-basic',
-  templateUrl: './basic.component.html',
-  styleUrls: ['./basic.component.css']
+  selector: 'app-cold-observables',
+  templateUrl: './cold-observables.component.html',
+  styleUrls: ['./cold-observables.component.css']
 })
-export class BasicComponent implements OnInit {
+export class ColdObservablesComponent implements OnInit {
 
   subscrition1: Subscription = new Subscription();
   subscrition2: Subscription = new Subscription();
@@ -20,29 +20,6 @@ export class BasicComponent implements OnInit {
   ngOnInit() {
     this.s1 = 'Initializing....';
     this.s2 = 'Initializing....';
-
-    const myFirstObservable = new Observable(
-      (observer: Observer<number>) => {
-        observer.next(1);
-        observer.next(2);
-        observer.next(3);
-        observer.next(4);
-        observer.next(5);
-        observer.error("error");
-        observer.complete();
-      }
-    );
-    myFirstObservable.subscribe(
-      (n: number)  => console.log(n), 
-      (error) => console.error(error), 
-      () => console.log("completed"));
-
-    /*  const timerCount = interval(500);
-    timerCount.subscribe(
-        (n) => console.log(n)
-    )
-    console.log("after interval");
-    */
 
     const myIntervalObservable = new Observable(
       (observer: Observer<any>) => {
@@ -61,17 +38,21 @@ export class BasicComponent implements OnInit {
       }
     );
 
+    this.s1 = 'wating for interval......';
     this.subscrition1 = myIntervalObservable.subscribe(
         (n) => {this.n1 = n},
         (error) => {this.s1 = 'Error: ' + error},
         () => {this.s1 = 'Completed'}
     );
 
-    this.subscrition2 = myIntervalObservable.subscribe(
-      (n) => {this.n1 = n},
-      (error) => {this.s2 = 'Error: ' + error},
-      () => {this.s2 = 'Completed'}
-  );
+    this.s2 = 'wating for interval......';
+      setInterval(() => {
+        this.subscrition2 = myIntervalObservable.subscribe(
+          (n) => {this.n2 = n},
+          (error) => {this.s2 = 'Error: ' + error},
+          () => {this.s2 = 'Completed'}
+      );
+      }, 3000 );
 
   setTimeout(() => {
       this.subscrition1.unsubscribe();
@@ -81,3 +62,4 @@ export class BasicComponent implements OnInit {
   }
 
 }
+
