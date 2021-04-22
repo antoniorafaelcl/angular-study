@@ -1,5 +1,4 @@
 export class OfertasModule {
-
     public id: number;
     public categoria: string;
     public titulo: string;
@@ -7,5 +6,5 @@ export class OfertasModule {
     public anunciante: string;
     public valor: number;
     public destaque: boolean;
-    public imagens: Array<object>;
-   }
+    public imagens: Array<{url: string}>;
+}
