@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core'
 import { OfertasModule  as  Oferta} from './shared/oferta.model'
 
 import { URL_API } from './app.api'
+import { Observable } from 'rxjs'
+import { retry } from 'rxjs/operators'
+
 
 @Injectable()
 export class OfertasService {
@@ -37,6 +40,12 @@ export class OfertasService {
     public getOndeFicaOfertaPorId(id: number): Promise<string> {
         return this.http.get<string>(`${URL_API}/onde-fica?id=${id}`)
         .toPromise()
+    }
+
+    public pesquisaOfertas(termo: string): Observable<Oferta[]> {
+        return this.http.get<Oferta[]>(`${URL_API}/ofertas?descricao_oferta_like=${termo}`)
+            .pipe (retry(10))
+           // map((resposta: any) => resposta.json())
     }
 
 }
